@@ -12,7 +12,11 @@ v1
 5. ~~Toggle complete status.~~
 6. Delete item option.  
 7. ~~Load list from backend.~~
-8. Store lists in backend.
+8. Setup ReTHINKDB on server.
+9. Store lists in backend.
+
+
+
 
 v2
 1. Multiple layout types (Day vs 7 days vs month)
