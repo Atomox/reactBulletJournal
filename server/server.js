@@ -6,6 +6,27 @@ var server = require('http').createServer(app);
 app.use(express.static(__dirname + '/includes'));
 */
 
+let r = require('rethinkdb');
+let settings = require('./settings.js');
+
+// Connect to the DB.
+r.connect({ host: settings.db.host, port: settings.db.port }, function(err, conn) {
+  if (err) { 
+    console.error('Check your host and port. Did you expose the port?');
+    throw err; 
+  }
+
+  // Select all rows in the table.
+  r.table('tv_shows').run(conn, (err, cursor) => {
+    if (err) { throw err; }
+    cursor.toArray((err, result) => {
+      if (err) { throw err; }
+      console.log(JSON.stringify(result, null, 2));
+    });
+  });
+});
+
+
 let lists = [
       { id: 1,
         title: 'Lake Destiny',
