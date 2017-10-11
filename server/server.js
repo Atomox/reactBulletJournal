@@ -8,6 +8,7 @@ app.use(express.static(__dirname + '/includes'));
 
 let r = require('rethinkdb');
 let settings = require('./settings.js');
+let db_name = settings.db.name;
 
 // Connect to the DB.
 r.connect({ host: settings.db.host, port: settings.db.port }, function(err, conn) {
@@ -17,13 +18,17 @@ r.connect({ host: settings.db.host, port: settings.db.port }, function(err, conn
   }
 
   // Select all rows in the table.
-  r.table('tv_shows').run(conn, (err, cursor) => {
-    if (err) { throw err; }
-    cursor.toArray((err, result) => {
-      if (err) { throw err; }
-      console.log(JSON.stringify(result, null, 2));
+  r.db(db_name).table('tv_shows')
+    .run(conn)
+    .then((cursor) => {
+      cursor.toArray((err, result) => {
+        if (err) { throw err; }
+        console.log(JSON.stringify(result, null, 2));
+      });
+    })
+    .catch((err) => {
+      console.error(err);
     });
-  });
 });
 
 
